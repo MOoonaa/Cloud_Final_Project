@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build:
+      context: .
+      dockerfile: py.Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: mysql+pymysql://root:root@database:3306/mydatabase
+    volumes:
+      - .:/app
+
+  database:
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./StudentsDB.sql:/docker-entrypoint-initdb.d/StudentsDB.sql
+
+
